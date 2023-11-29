@@ -30,7 +30,7 @@ app.get('/', (req,res) => {
     res.send("Millets Pro Backend");
 })
 
-app.get('/get-results', auth, async (req, res) => {
+app.post('/get-results', auth, async (req, res) => {
     if (!req.body.imgURL)
         return res.status(403).json({
             message: "Image URL is missing"
