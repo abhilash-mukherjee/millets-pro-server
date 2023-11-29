@@ -12,7 +12,7 @@ app.listen(port, () => {
 })
 
 app.use(bodyParser.json());
-app.use(auth);
+
 function auth(req, res, next) {
     if (!req.headers || !req.headers.authorization)
         return res.status(403).json({
@@ -27,7 +27,7 @@ function auth(req, res, next) {
 }
 
 
-app.get('/get-results', async (req, res) => {
+app.get('/get-results', auth, async (req, res) => {
     if (!req.body.imgURL)
         return res.status(403).json({
             message: "Image URL is missing"
