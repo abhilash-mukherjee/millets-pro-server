@@ -2,6 +2,7 @@ const axios = require("axios");
 const sharp = require('sharp');
 const express = require('express')
 const bodyParser = require('body-parser')
+require('dotenv').config();
 
 const app = express()
 const port = 3000
@@ -11,6 +12,21 @@ app.listen(port, () => {
 })
 
 app.use(bodyParser.json());
+app.use(auth);
+function auth(req, res, next) {
+    if (!req.headers || !req.headers.authorization)
+        return res.status(403).json({
+            message: "No auth"
+        });
+    const secretKey = req.headers.authorization.split(' ')[1];
+    if(secretKey === process.env.SECRET_KEY)
+        next();
+    else return res.status(403).json({
+        message: "Authorization failed"
+    });
+}
+
+
 app.get('/get-results', async (req, res) => {
     if (!req.body.imgURL)
         return res.status(403).json({
@@ -51,7 +67,7 @@ async function getResults(url) {
             method: "POST",
             url: "https://detect.roboflow.com/ragi-impurity-detection/1",
             params: {
-                api_key: "ROn7MooXrlCS350XHYAF",
+                api_key: process.env.API_KEY,
                 image: url
             }
         });
