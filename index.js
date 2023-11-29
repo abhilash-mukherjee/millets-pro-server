@@ -26,6 +26,9 @@ function auth(req, res, next) {
     });
 }
 
+app.get('/', (req,res) => {
+    res.send("Millets Pro Backend");
+})
 
 app.get('/get-results', auth, async (req, res) => {
     if (!req.body.imgURL)
